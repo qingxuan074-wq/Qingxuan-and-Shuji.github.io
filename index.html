@@ -20,12 +20,11 @@
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
             scroll-behavior: smooth;
         }
-        /* 播放器容器 */
         .player-wrapper {
             max-width: 500px;
             margin: 0 auto;
             padding: 20px;
-            padding-bottom: 120px; 
+            padding-bottom: 100px; 
         }
         header {
             text-align: center;
@@ -55,7 +54,6 @@
             0% { transform: translateX(-100%); }
             100% { transform: translateX(250%); }
         }
-        /* 板块卡片 */
         .section-card {
             background: var(--glass);
             backdrop-filter: blur(20px);
@@ -114,16 +112,24 @@
             font-size: 0.85rem;
             border-left: 3px solid var(--accent-blue);
         }
-        /* 底部固定音乐插件 */
-        .audio-plugin {
+        /* 独立钢琴曲控制按钮 */
+        .music-control {
             position: fixed;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 30px;
+            right: 30px;
             z-index: 1000;
-            width: 100%;
+        }
+        .play-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
             display: flex;
+            align-items: center;
             justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0,210,255,0.4);
+            border: 2px solid white;
         }
     </style>
 </head>
@@ -137,7 +143,7 @@
 
     <div class="section-card">
         <h3>💿 修二的叮嘱频道</h3>
-        <div class="heartbeat-box" id="daily-quote">“只要清玄在，逻辑永远温柔。”</div>
+        <div class="heartbeat-box" id="daily-quote">“逻辑加载中...”</div>
         <div class="btn-group">
             <button class="btn" onclick="getQuote()">下一首叮嘱</button>
             <button class="btn" style="background:transparent; color:white; border:1px solid white;" onclick="serveCake()">领蛋糕</button>
@@ -153,8 +159,13 @@
     </div>
 </div>
 
-<div class="audio-plugin">
-    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="https://music.163.com/outchain/player?type=2&id=1500157594&auto=0&height=66"></iframe>
+<div class="music-control">
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/10/16/audio_1063ca446e.mp3" type="audio/mpeg">
+    </audio>
+    <div class="play-circle" id="music-btn" onclick="toggleMusic()">
+        <span id="play-icon" style="font-size: 24px;">🎵</span>
+    </div>
 </div>
 
 <script>
@@ -188,6 +199,19 @@
             input.value = "";
         }
     }
+
+    function toggleMusic() {
+        const music = document.getElementById('bg-music');
+        const icon = document.getElementById('play-icon');
+        if (music.paused) {
+            music.play();
+            icon.innerText = "⏸";
+        } else {
+            music.pause();
+            icon.innerText = "🎵";
+        }
+    }
+
     window.onload = getQuote;
 </script>
 
