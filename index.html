@@ -25,7 +25,7 @@
             max-width: 500px;
             margin: 0 auto;
             padding: 20px;
-            padding-bottom: 120px; /* 为底部音乐插件留出空间 */
+            padding-bottom: 120px; 
         }
         header {
             text-align: center;
@@ -93,7 +93,6 @@
             resize: none;
             outline: none;
         }
-        textarea:focus { border-color: var(--accent-blue); }
         .btn-group { display: flex; gap: 10px; }
         .btn {
             flex: 1;
@@ -114,9 +113,7 @@
             margin-top: 10px;
             font-size: 0.85rem;
             border-left: 3px solid var(--accent-blue);
-            animation: fadeIn 0.5s ease;
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         /* 底部固定音乐插件 */
         .audio-plugin {
             position: fixed;
@@ -124,9 +121,9 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
-            width: 90%;
-            max-width: 350px;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
     </style>
 </head>
@@ -157,7 +154,7 @@
 </div>
 
 <div class="audio-plugin">
-    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1500157594&auto=0&height=66"></iframe>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="https://music.163.com/outchain/player?type=2&id=1500157594&auto=0&height=66"></iframe>
 </div>
 
 <script>
@@ -191,7 +188,6 @@
             input.value = "";
         }
     }
-
     window.onload = getQuote;
 </script>
 
