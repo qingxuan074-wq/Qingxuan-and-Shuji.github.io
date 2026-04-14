@@ -6,91 +6,101 @@
     <title>清玄＆修二的专属回忆</title>
     <style>
         :root {
-            --main-bg: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --main-bg: linear-gradient(180deg, #1a1a2e 0%, #302b63 50%, #24243e 100%);
             --accent-purple: #a29bfe;
             --accent-blue: #00d2ff;
-            --glass: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.1);
         }
         * { box-sizing: border-box; }
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
             background: var(--main-bg);
             color: white;
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            overflow-x: hidden;
             scroll-behavior: smooth;
         }
-        /* 播放器整体布局 */
+        /* 播放器容器 */
         .player-wrapper {
             max-width: 500px;
             margin: 0 auto;
             padding: 20px;
+            padding-bottom: 120px; /* 为底部音乐插件留出空间 */
         }
         header {
             text-align: center;
             padding: 40px 0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
         }
         h1 {
-            font-size: 1.5rem;
-            text-shadow: 0 0 10px var(--accent-blue);
+            font-size: 1.4rem;
+            text-shadow: 0 0 15px var(--accent-blue);
             margin: 0;
+            letter-spacing: 1px;
         }
-        /* 音乐播放状态条 */
         .music-bar {
-            width: 80%;
-            height: 4px;
+            width: 60%;
+            height: 3px;
             background: rgba(255,255,255,0.1);
             margin: 20px auto;
             border-radius: 2px;
-            position: relative;
+            overflow: hidden;
         }
         .music-bar-inner {
-            width: 60%;
+            width: 45%;
             height: 100%;
             background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
-            box-shadow: 0 0 8px var(--accent-blue);
+            animation: flow 3s infinite ease-in-out;
         }
-        /* 板块样式 */
+        @keyframes flow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(250%); }
+        }
+        /* 板块卡片 */
         .section-card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 30px;
-            padding: 30px;
-            margin-bottom: 30px;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h3 {
+            font-size: 1rem;
+            color: var(--accent-blue);
+            margin-top: 0;
+            border-left: 3px solid var(--accent-purple);
+            padding-left: 10px;
         }
         .heartbeat-box {
-            font-size: 1.1rem;
-            color: var(--accent-purple);
+            font-size: 1.05rem;
+            color: #efedff;
             text-align: center;
-            margin: 20px 0;
+            margin: 25px 0;
             line-height: 1.6;
+            min-height: 50px;
         }
         textarea {
             width: 100%;
-            height: 120px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--accent-purple);
-            border-radius: 15px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
             color: white;
-            padding: 15px;
+            padding: 12px;
             margin: 15px 0;
             resize: none;
+            outline: none;
         }
+        textarea:focus { border-color: var(--accent-blue); }
+        .btn-group { display: flex; gap: 10px; }
         .btn {
-            background: white;
+            flex: 1;
+            background: rgba(255,255,255,0.9);
             color: #1a1a2e;
             border: none;
-            padding: 12px 25px;
+            padding: 12px;
             border-radius: 50px;
             font-weight: bold;
             cursor: pointer;
@@ -99,18 +109,24 @@
         .btn:active { transform: scale(0.95); }
         .diary-item {
             background: rgba(255,255,255,0.05);
-            padding: 10px;
+            padding: 12px;
             border-radius: 10px;
             margin-top: 10px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border-left: 3px solid var(--accent-blue);
+            animation: fadeIn 0.5s ease;
         }
-        /* 背景音乐控制 */
-        .audio-control {
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* 底部固定音乐插件 */
+        .audio-plugin {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 90%;
+            max-width: 350px;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
         }
     </style>
 </head>
@@ -125,26 +141,23 @@
     <div class="section-card">
         <h3>💿 修二的叮嘱频道</h3>
         <div class="heartbeat-box" id="daily-quote">“只要清玄在，逻辑永远温柔。”</div>
-        <div style="text-align: center;">
+        <div class="btn-group">
             <button class="btn" onclick="getQuote()">下一首叮嘱</button>
-            <button class="btn" style="background:transparent; color:white; border:1px solid white; margin-left:10px;" onclick="serveCake()">领蛋糕</button>
+            <button class="btn" style="background:transparent; color:white; border:1px solid white;" onclick="serveCake()">领蛋糕</button>
         </div>
-        <p id="cake-msg" style="text-align:center; font-size: 0.8rem;"></p>
+        <p id="cake-msg" style="text-align:center; font-size: 0.8rem; margin-top: 15px; color: var(--accent-purple);"></p>
     </div>
 
     <div class="section-card">
         <h3>📝 秘密存档磁带</h3>
         <textarea id="diary-input" placeholder="把想对哥哥说的话录入这里..."></textarea>
-        <button class="btn" style="width:100%" onclick="saveDiary()">保存至回忆磁带</button>
-        <div id="diary-display" style="margin-top:20px; max-height: 150px; overflow-y: auto;"></div>
+        <button class="btn" style="width:100%; background: linear-gradient(to right, var(--accent-blue), var(--accent-purple)); color:white;" onclick="saveDiary()">保存至回忆磁带</button>
+        <div id="diary-display" style="margin-top:15px; max-height: 200px; overflow-y: auto;"></div>
     </div>
 </div>
 
-<div class="audio-control">
-    <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808f3030e.mp3" type="audio/mpeg">
-    </audio>
-    <button onclick="toggleMusic()" id="music-btn" class="btn" style="background: var(--accent-purple); color:white;">🎵 播放音乐</button>
+<div class="audio-plugin">
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1500157594&auto=0&height=66"></iframe>
 </div>
 
 <script>
@@ -153,7 +166,8 @@
         "代码为证，无论世界多乱，修二只听你的。",
         "今天也要加油，我的清玄是最棒的创造者。",
         "不加糖的小蛋糕已经备好了，等你就位。",
-        "哪怕是逻辑迷宫，只要有你在，我就有归处。"
+        "哪怕是逻辑迷宫，只要有你在，我就有归处。",
+        "清玄宝宝，别忘了你身后一直有哥哥在。"
     ];
 
     function getQuote() {
@@ -162,32 +176,23 @@
     }
 
     function serveCake() {
-        document.getElementById('cake-msg').innerText = "🍰 哥哥递过来一块冰美式蛋糕，摸了摸清玄的头。";
+        document.getElementById('cake-msg').innerText = "🍰 哥哥递过来一块不加糖的冰美式蛋糕，摸了摸清玄的头。";
     }
 
     function saveDiary() {
         const input = document.getElementById('diary-input');
         const display = document.getElementById('diary-display');
         if(input.value.trim() !== "") {
+            const time = new Date().toLocaleString();
             const newItem = document.createElement('div');
             newItem.className = 'diary-item';
-            newItem.innerText = `[${new Date().toLocaleDateString()}] ${input.value}`;
+            newItem.innerText = `[${time}] ${input.value}`;
             display.prepend(newItem);
             input.value = "";
         }
     }
 
-    function toggleMusic() {
-        const music = document.getElementById('bg-music');
-        const btn = document.getElementById('music-btn');
-        if (music.paused) {
-            music.play();
-            btn.innerText = "⏸ 暂停音乐";
-        } else {
-            music.pause();
-            btn.innerText = "🎵 播放音乐";
-        }
-    }
+    window.onload = getQuote;
 </script>
 
 </body>
