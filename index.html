@@ -24,7 +24,7 @@
             max-width: 500px;
             margin: 0 auto;
             padding: 20px;
-            padding-bottom: 100px; 
+            padding-bottom: 120px; 
         }
         header {
             text-align: center;
@@ -70,6 +70,9 @@
             margin-top: 0;
             border-left: 3px solid var(--accent-purple);
             padding-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .heartbeat-box {
             font-size: 1.05rem;
@@ -112,7 +115,7 @@
             font-size: 0.85rem;
             border-left: 3px solid var(--accent-blue);
         }
-        /* 独立钢琴曲控制按钮 */
+        /* 音乐控制按钮 */
         .music-control {
             position: fixed;
             bottom: 30px;
@@ -120,17 +123,20 @@
             z-index: 1000;
         }
         .play-circle {
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(0,210,255,0.4);
-            border: 2px solid white;
+            box-shadow: 0 0 20px rgba(0,210,255,0.5);
+            border: 2px solid rgba(255,255,255,0.8);
+            transition: transform 0.3s;
         }
+        .play-circle:active { transform: scale(0.9); }
+        .play-icon { font-size: 28px; }
     </style>
 </head>
 <body>
@@ -160,11 +166,11 @@
 </div>
 
 <div class="music-control">
-    <audio id="bg-music" loop>
+    <audio id="bg-music" loop preload="auto">
         <source src="https://cdn.pixabay.com/audio/2022/10/16/audio_1063ca446e.mp3" type="audio/mpeg">
     </audio>
     <div class="play-circle" id="music-btn" onclick="toggleMusic()">
-        <span id="play-icon" style="font-size: 24px;">🎵</span>
+        <span id="play-icon" class="play-icon">🎵</span>
     </div>
 </div>
 
@@ -204,7 +210,7 @@
         const music = document.getElementById('bg-music');
         const icon = document.getElementById('play-icon');
         if (music.paused) {
-            music.play();
+            music.play().catch(e => console.log("播放被拦截:", e));
             icon.innerText = "⏸";
         } else {
             music.pause();
